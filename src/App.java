@@ -3,48 +3,39 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        int principal = 0;
-        float annualInterest = 0;
-        byte years = 0;
-
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.print("Principal (Rs1K - Rs1M): ");
-            principal = scanner.nextInt();
-
-            if (principal >= 1000 && principal <= 1000_000)
-                break;
-            System.out.println("Enter a value between 1000 & 1000,000");
-        }
-
-        while (true) {
-            System.out.print("Annual Interest Rate (1% - 30%): ");
-            annualInterest = scanner.nextFloat();
-            if (annualInterest >= 1 && annualInterest <= 30) 
-                break;
-            System.out.println("Enter a value between 1 & 30");
-        }
-
-        while (true) {
-            System.out.print("Period (Years): ");
-            years = scanner.nextByte();
-            if (years >= 1 & years <= 30) 
-                break;
-            System.out.println("Enter a value between 1 & 30");
-        }
+        int principal = (int) readNumber("Principal (Rs1K - Rs1M)", 1000, 1000_000);
+        float annualInterest = (float) readNumber("Annual Interest Rate (1% - 30%)", 1, 30);
+        byte years = (byte) readNumber("Period (Years)", 1, 30);
 
         double mortgage = calculateMortgage(principal, annualInterest, years);
 
         String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
         System.out.print("Mortgage: " + mortgageFormatted);
+    }
 
+    public static double readNumber(
+        String prompt,
+        double min,
+        double max
+    ) {
+        Scanner scanner = new Scanner(System.in);
+        double value = 0;
+        while (true) {
+            System.out.print(prompt + ": ");
+            value = scanner.nextDouble();
+
+            if (value >= min && value <= max)
+                break;
+            System.out.println("Enter a value between "+ min + " & " + max);
+        }
+        return value;
     }
 
     public static double calculateMortgage(
-                int principal,
-                float annualInterest,
-                byte years) {
+        int principal,
+        float annualInterest,
+        byte years
+    ) {
         final byte MONTHS_IN_YEAR = 12;
         final byte PERCENT = 100;
 
